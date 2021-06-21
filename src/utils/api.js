@@ -1,5 +1,5 @@
 
-
+// хоть тут не надо все переписывать *ну почти
 class Api {
 
     constructor({ baseUrl, token }) {

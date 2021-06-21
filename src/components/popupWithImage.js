@@ -1,10 +1,20 @@
-function ImagePopup({ srcImage, text }) {
+function ImagePopup(props) {
+    const className = `popup popup_dark ${props.card.isOpen ? 'popup_visible' : ''}`;
+
+    //куда исчезла кнопка закрыть блин время час ночи
     return (
-      <section className="popup popup_dark popup-img" id="popup-image">
+        <section className={className} id="popup-image"> 
         <figure className="popup__figure">
-          <button className="popup__button-close" type="button"></button>
-          <img className="popup__image" alt="Картинка" src={srcImage} />
-          <figcaption className="popup__caption">{text}</figcaption>
+        <button
+          className="button popup__close-button"
+          type="button"
+          onClick={props.onClose}>
+        </button>
+          <img className="popup__image" alt="Картинка"
+           src={props.card.link} 
+           alt={props.card.name} 
+            />
+          <figcaption className="popup__caption">{props.card.name}</figcaption>
         </figure>
       </section>
     );

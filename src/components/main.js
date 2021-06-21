@@ -22,21 +22,11 @@ function Main(props) {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true)
     api.getInitialCards()
       .then(res => {
-        const cards = res.map(item => {
-          return {
-            id: item._id,
-            src: item.link,
-            title: item.name,
-            likes: item.likes.length
-          }
-        })
-        setCards(cards)
+       setCards(res) // тут name link src , но с ними перечисленными все белое. 
       })
       .catch(err => console.log(`Error: ${err}`))
-      .finally(() => setIsLoading(false))
   }, []);
 
     return (
@@ -61,9 +51,9 @@ function Main(props) {
         : (<section className={"places__list page__places places"}>
           {cards.map(item => (
             <Card
-              key={item.id}
-              {...item}
-              handleClick={() => { props.onCardClick(item) }}
+            key={item._id}
+            card={item}
+            handleClick={props.onCardClick} 
             />
           )
           )}

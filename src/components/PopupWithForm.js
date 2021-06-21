@@ -1,5 +1,6 @@
 import React from "react";
 import closeBtn from '../images/Close_Icon.svg'
+//если б не вебинар с children вообще не разобраться.
 
 function PopupWithForm(props) {
   return (
