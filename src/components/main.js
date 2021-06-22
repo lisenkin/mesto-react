@@ -10,7 +10,7 @@ function Main(props) {
   const [userAvatar, setUserAvatar] = useState();
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     api.getUserInfo()
       .then(res => {
@@ -24,12 +24,12 @@ function Main(props) {
   useEffect(() => {
     api.getInitialCards()
       .then(res => {
-       setCards(res) // тут name link src , но с ними перечисленными все белое. 
+        setCards(res) // тут name link src , но с ними перечисленными все белое.
       })
       .catch(err => console.log(`Error: ${err}`))
   }, []);
 
-    return (
+  return (
     <main className={"page__content content"}>
       <section className={"page__profile profile"}>
         <div className={"profile__overlay"} onClick={props.onEditAvatar}>
@@ -51,9 +51,9 @@ function Main(props) {
         : (<section className={"places__list page__places places"}>
           {cards.map(item => (
             <Card
-            key={item._id}
-            card={item}
-            handleClick={props.onCardClick} 
+              key={item._id}
+              card={item}
+              handleClick={props.onCardClick}
             />
           )
           )}
