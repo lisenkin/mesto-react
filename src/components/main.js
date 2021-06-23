@@ -1,6 +1,6 @@
 import api from '../utils/api.js'
 import { useEffect, useState } from 'react';
-import Card from './card.js';
+import Card from './Card.js';
 
 
 function Main(props) {
@@ -12,21 +12,25 @@ function Main(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true)
     api.getUserInfo()
       .then(res => {
         setUserName(res.name)
         setUserDescription(res.about)
         setUserAvatar(res.avatar)
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error: ${err}`))
+      .finally(() => setIsLoading(false))
   }, []);
 
   useEffect(() => {
+    setIsLoading(true)
     api.getInitialCards()
       .then(res => {
         setCards(res) // тут name link src , но с ними перечисленными все белое.
       })
       .catch(err => console.log(`Error: ${err}`))
+      .finally(() => setIsLoading(false))
   }, []);
 
   return (

@@ -20,7 +20,7 @@ function Card(props) {
         <h2 className="place__text">{props.card.name}</h2>
         <div className="place__column-block">
           <button className="place__like" type="button"></button>
-          <span className="place__score-like">0</span>
+          <span className="place__score-like">{props.card.likes.length}</span>
         </div>
       </div>
     </article>
