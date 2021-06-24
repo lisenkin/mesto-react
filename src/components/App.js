@@ -9,6 +9,9 @@ import Main from './Main.js';
 import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './PopupWithImage.js';
 
+//сорри за прошлую итерацию, почему-то не загрузилось на гит :(
+
+
 //попробуем так
 //стоило так радостно вспоминать классы что б снова переписывать  на функции(
 function App() {
