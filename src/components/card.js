@@ -1,5 +1,5 @@
 import React from "react";
-
+//update
 function Card(props) {
   //вынесем сюда открытие по клику
   function handleImageClick() {

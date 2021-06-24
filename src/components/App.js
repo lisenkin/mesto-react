@@ -10,7 +10,7 @@ import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './PopupWithImage.js';
 
 //сорри за прошлую итерацию, почему-то не загрузилось на гит :(
-
+//update
 
 //попробуем так
 //стоило так радостно вспоминать классы что б снова переписывать  на функции(
