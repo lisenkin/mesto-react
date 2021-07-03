@@ -7,7 +7,7 @@ import Header from './Header.js';
 import Footer from './Footer.js';
 import Main from './Main.js';
 import PopupWithForm from './PopupWithForm.js';
-import ImagePopup from './PopupWithImage.js';
+import ImagePopup from './ImagePopup.js';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
@@ -127,6 +127,7 @@ function App() {
           srcLogo={logo}
           altLogo={"лого место"}
         />
+
 
         <Main
           onEditProfile={handleEditProfileClick}

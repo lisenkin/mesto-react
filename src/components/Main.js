@@ -1,4 +1,3 @@
-import api from '../utils/api.js'
 import { useEffect, useState, useContext } from 'react';
 import Card from './Card.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
