@@ -1,13 +1,18 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '../images/Vector.svg';
-
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js'
 import '../index.css';
 import Header from './Header.js';
 import Footer from './Footer.js';
 import Main from './Main.js';
 import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './PopupWithImage.js';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
+
+import api from '../utils/api.js'
 
 //сорри за прошлую итерацию, почему-то не загрузилось на гит :(
 //update
@@ -15,12 +20,58 @@ import ImagePopup from './PopupWithImage.js';
 //попробуем так
 //стоило так радостно вспоминать классы что б снова переписывать  на функции(
 function App() {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] =  React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =  React.useState(false);
-  const [selectedCard, setSelectedCard] =  React.useState({ isOpen: false });
+  const [currentUser, setCurrentUser] = useState({
+    name: "Loading...",
+    about: ''
+  });
 
-//закрытие всех попапов (установим всем фолс)
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({ isOpen: false });
+  const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  //загрузим карточки
+  useEffect(() => {
+    setIsLoading(true)
+    api.getInitialCards()
+      .then(res => {
+        setCards(res)
+      })
+      .catch(err => console.log(`Error: ${err}`))
+      .finally(() => setIsLoading(false))
+  }, []);
+
+  //загрузим юзер инфо дернув апи
+  useEffect(() => {
+    api.getUserInfo()
+      .then(res => {
+        setCurrentUser(res);
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }, []);
+  //обновим юзер инфо на новую
+  function handleUpdateUser({ name, about }) {
+    api.setUserInfo({ name, about })
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+  //обновим аватар
+  function handleUpdateAvatar(avatar) {
+    api.editUserAvatar(avatar)
+      .then(res => {
+        setCurrentUser(avatar);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+
+  //закрытие всех попапов (установим всем фолс)
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
@@ -29,6 +80,7 @@ function App() {
   }
 
   //кто вообще сказал что реакт легче 9 спринта?
+  // upd после 11 спринта вроде не так плохо
 
   //эдит профиль
   const handleEditProfileClick = () => { setIsEditProfilePopupOpen(true) }
@@ -39,80 +91,87 @@ function App() {
   // большая картинка
   const handleCardClick = (data) => { setSelectedCard({ isOpen: true, ...data }) }
 
+  //лайк с переделанным апи
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(item => item._id === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, isLiked)
+      .then(res => {
+        const newCards = cards.map(item => item._id === card._id ? res : item);
+        setCards(newCards);
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+  //удалить карточку (свою)
+  function handleCardDelete(card) {
+    api.removeCard(card._id)
+      .then(res => {
+        const newCards = cards.filter(item => item._id === card._id ? null : item);
+        setCards(newCards);
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+  //добавить карточку
+  function handleAddPlaceSubmit({ name, link }) {
+    api.setCard({ name, link })
+      .then(res => {
+        setCards([res, ...cards]);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
   return (
     <div className={"page__content"}>
-      <Header
-        srcLogo={logo}
-        altLogo={"лого место"}
-      />
+      <CurrentUserContext.Provider value={currentUser}>
+        <Header
+          srcLogo={logo}
+          altLogo={"лого место"}
+        />
 
-      <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
+        <Main
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          isLoading={isLoading}
         />
 
 
-      <Footer text={"2021 mesto lisenkin"} />
+        <Footer text={"2021 mesto lisenkin"} />
 
-      <PopupWithForm
-        name={"popup-edit-card"}
-        title={"Редактировать профиль"}
-        textButton={"Сохранить"}
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-      >
-        <input className="popup__input popup__input_type_name" type="text" placeholder="ваше имя"  name="name" id="popup-input-name"
-          minLength="2" maxLength="40"  required/>
-        <span className="popup__error popup-input-name-error"></span>
-        <input className="popup__input popup__input_type_status" type="text"  name="about" placeholder="о себе" id="popup-input-status"
-          minLength="2" maxLength="200" required/>
-         <span className="popup__error popup-input-status-error"></span>
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+        />
 
-      </PopupWithForm>
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}
+        />
 
-      <PopupWithForm
-        name={"popup-add-card"}
-        title={"Новое место"}
-        textButton={"Создать"}
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}
-      >
-        <input className="popup__input popup__input_type_place-name" type="text" name="name" placeholder="Название"
-          id="popup-input-place-name" minLength="2" maxLength="30" required/>
-        <span className="popup__error popup-input-place-name-error"></span>
-        <input className="popup__input popup__input_type_photo" type="url" name="link" placeholder="Ссылка на картинку"
-          id="popup-input-url" required/>
-        <span className="popup__error popup-input-url-error"></span>
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
+        <PopupWithForm
+          name={"popup-remove-card"}
+          title={"Вы уверены?"}
+          textButton={"Да"}
+        />
 
-      </PopupWithForm>
-
-      <PopupWithForm
-        name={"popup-add-avatar"}
-        title={"Обновить аватар"}
-        textButton={"Сохранить"}
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-      >
-           <input className="popup__input popup__input_type_avatar" type="url" placeholder="Ссылка на аватар"
-        name="link" required/>
-          <span className="popup__error popup-input-url-error"></span>
-      </PopupWithForm>
-
-      <PopupWithForm
-        name={"popup-remove-card"}
-        title={"Вы уверены?"}
-        textButton={"Да"}
-      />
-
-      <ImagePopup
-         isOpen={selectedCard}
-         card={selectedCard}
-        onClose={closeAllPopups}
-      />
-
+        <ImagePopup
+          isOpen={selectedCard}
+          card={selectedCard}
+          onClose={closeAllPopups}
+        />
+      </CurrentUserContext.Provider>
     </div>
 
   );

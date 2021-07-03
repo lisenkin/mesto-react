@@ -6,7 +6,7 @@ class Api {
       this._baseUrl = baseUrl;
       this._token = token;
     }
-  
+
   // приватный метод для ошибки что б не было дублирования :)
      _checkResponse(res) {
       if (res.ok) {
@@ -14,7 +14,7 @@ class Api {
       }
       return Promise.reject(`Ошибка: ${res.status}`);
     }
-  
+
     // метод загрузки карточек с сервера
     getInitialCards() {
       return fetch(`${this._baseUrl}/cards`, {
@@ -34,7 +34,7 @@ class Api {
       .then(this._checkResponse)
     }
     //изменение юзеринфо передаем name и job(about)
-    editUserInfo({ name: newName, about: newAbout }) {
+    setUserInfo({ name, about }) {
       return fetch(`${this._baseUrl}/users/me`, {
         method: 'PATCH',
         headers: {
@@ -42,14 +42,14 @@ class Api {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name: newName,
-          about: newAbout
+          name,
+          about,
         })
       })
       .then(this._checkResponse)
     }
     //добавить карточку  data (name link)  POST
-    addCard({ name: newCardName, link: newCardLink }) {
+    setCard({ name, link }) {
       return fetch(`${this._baseUrl}/cards`, {
         method: 'POST',
         headers: {
@@ -57,13 +57,13 @@ class Api {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name: newCardName,
-          link: newCardLink
+        name,
+        link
         })
       })
       .then(this._checkResponse)
     }
-  
+
     removeCard(cardId) {
       return fetch(`${this._baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
@@ -74,8 +74,17 @@ class Api {
       })
       .then(this._checkResponse)
     }
-  
-    addLike(cardId) {
+
+    changeLikeCardStatus(cardId, isLiked) {
+      return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+        method: isLiked ? 'DELETE' : 'PUT',
+        headers: {
+          authorization: this._token,
+        }
+      })
+      .then(this._checkResponse)
+    }
+    /*addLike(cardId) {
       return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: {
@@ -85,7 +94,7 @@ class Api {
       })
       .then(this._checkResponse)
     }
-  
+
     removeLike(cardId) {
       return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
@@ -95,7 +104,7 @@ class Api {
         },
       })
       .then(this._checkResponse)
-    }
+    }*/
     // avatar = data
     editUserAvatar(avatar) {
       return fetch(`${this._baseUrl}/users/me/avatar`, {
@@ -104,20 +113,18 @@ class Api {
           authorization: this._token,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          avatar: avatar,
-        })
+        body: JSON.stringify(avatar)
       })
       .then(this._checkResponse)
     }
   }
-  
+
   const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-24',
     token: '1c58ab56-f6d5-4a78-b0cd-4b039a0e7da3'
     //groupId: 'cohort-24'
   }
-  
+
   const api = new Api(config);
 
-export default api; 
+export default api;
