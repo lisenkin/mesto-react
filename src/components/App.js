@@ -121,11 +121,11 @@ function App() {
       .catch(err => console.log(`Error: ${err}`));
   }
   return (
-    <div className={"page__content"}>
+    <div className="page__content">
       <CurrentUserContext.Provider value={currentUser}>
         <Header
           srcLogo={logo}
-          altLogo={"лого место"}
+          altLogo="лого место"
         />
 
 
@@ -141,7 +141,7 @@ function App() {
         />
 
 
-        <Footer text={"2021 mesto lisenkin"} />
+        <Footer text="2021 mesto lisenkin" />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -162,9 +162,9 @@ function App() {
         />
 
         <PopupWithForm
-          name={"popup-remove-card"}
-          title={"Вы уверены?"}
-          textButton={"Да"}
+          name="popup-remove-card"
+          title="Вы уверены?"
+          textButton="Да"
         />
 
         <ImagePopup

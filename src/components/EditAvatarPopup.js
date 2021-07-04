@@ -1,5 +1,3 @@
-
-
 import { useState, useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
@@ -27,22 +25,22 @@ function EditAvatarPopup(props) {
 
   return (
     <PopupWithForm
-      name={"popup-add-avatar"}
-      title={"Обновить аватар"}
-      textButton={"Обновить"}
+      name="popup-add-avatar"
+      title="Обновить аватар"
+      textButton="Обновить"
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
     >
       <input
-        className={"popup__input popup__input_type_photo"}
-        type={"url"}
-        placeholder={"Ссылка на аватар"}
-        name={"popup-input-url-avatar"}
+        className="popup__input popup__input_type_photo"
+        type="url"
+        placeholder="Ссылка на аватар"
+        name="popup-input-url-avatar"
         onChange={handleChangeAvatar}
         required
       />
-      <span className={"popup__error popup-input-url-avatar-error"}></span>
+      <span className="popup__error popup-input-url-avatar-error"></span>
     </PopupWithForm>
   );
 }

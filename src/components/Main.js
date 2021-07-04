@@ -10,25 +10,25 @@ function Main(props) {
 
 
   return (
-    <main className={"page__content content"}>
-      <section className={"page__profile profile"}>
-        <div className={"profile__overlay"} onClick={props.onEditAvatar}>
-          <img src={currentUser.avatar} alt={props.altAvatar} className={"profile__avatar"} />
+    <main className="page__content content">
+      <section className="page__profile profile">
+        <div className="profile__overlay" onClick={props.onEditAvatar}>
+          <img src={currentUser.avatar} alt={props.altAvatar} className="profile__avatar" />
         </div>
-        <div className={"profile__info"}>
-          <div className={"profile__info-textblock"}>
-            <h1 className={"profile__name"}>{currentUser.name}</h1>
-            <button className={"profile__button-edit"} type={"button"} onClick={props.onEditProfile}></button>
+        <div className="profile__info">
+          <div className="profile__info-textblock">
+            <h1 className="profile__name">{currentUser.name}</h1>
+            <button className="profile__button-edit" type="button" onClick={props.onEditProfile}/>
           </div>
-          <p className={"profile__status"}>{currentUser.about}</p>
+          <p className="profile__status">{currentUser.about}</p>
         </div>
-        <button className={"profile__button-add"} type={"button"} onClick={props.onAddPlace}></button>
+        <button className="profile__button-add" type="button" onClick={props.onAddPlace}/>
       </section>
-      <section className={"page__places places"}>
+      <section className="page__places places">
       </section>
       {props.isLoading
         ? <p>Loading...</p>
-        : (<section className={"places__list page__places places"}>
+        : (<section className="places__list page__places places">
           {props.cards.map(item => (
             <Card
               key={item._id}
