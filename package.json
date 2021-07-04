@@ -11,6 +11,8 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
+  "author": "Maria Zavalina",
+  "description": "just one more react application for photo, with likes and another things",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

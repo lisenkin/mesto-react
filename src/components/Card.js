@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 //update
 //прокинем сюда пропсы про card owner
@@ -12,7 +12,7 @@ function Card(props) {
     : (null);
   const isLiked = props.card.likes.some(item => item._id === currentUser._id);
   const cardLikeButtonClassName = `place__like ${isLiked
-    ? ('place__like_active')
+    ? ('places__like_active')
     : ''}`;
 
   //вынесем сюда открытие по клику
